@@ -8,82 +8,122 @@
 import SwiftUI
 
 struct ContentView: View {
+    @State private var isSong = true
+    @State private var isAlbum = false
+
+    
     var body: some View {
-        ZStack {
-//            Rectangle()
-//                    .foregroundColor(.clear)
-//                    .background(RadialGradient(gradient: Gradient(colors: [Color(red: 0.21, green: 0.30, blue: 0.33), Color(red: 0.91, green: 0.91, blue: 0.88)]), center: .center, startRadius: 170, endRadius: 650))
-            
-            FloatingClouds()
-            
+        NavigationStack {
             ZStack {
-                VStack {
-                    Text("Taylor Swift")
-                        .font (
-                            .system(size: 50, weight: .semibold)
-                        )
-                        .padding(.bottom, 50)
-                        .overlay {
-                                LinearGradient(
-                                    colors: [Color(red: 0.26, green: 0.32, blue: 0.50), Color(red: 0.39, green: 0.51, blue: 0.58), Color(red: 0.52, green: 0.63, blue: 0.65)],
-                                    startPoint: .leading,
-                                    endPoint: .trailing
-                                )
-                                .mask(
-                                    Text("Taylor Swift")
-                                        .font (
-                                            .system(size: 50, weight: .semibold)
-                                        )
-                                        .padding(.bottom, 50)
-                                )
-                            }
-                    
-                    Text("Guess the...")
-                        .font (
-                            .system (
-                                .title
+    //            Rectangle()
+    //                    .foregroundColor(.clear)
+    //                    .background(RadialGradient(gradient: Gradient(colors: [Color(red: 0.21, green: 0.30, blue: 0.33), Color(red: 0.91, green: 0.91, blue: 0.88)]), center: .center, startRadius: 170, endRadius: 650))
+                
+                FloatingClouds()
+                
+                ZStack {
+                    VStack {
+                        Text("Taylor Swift")
+                            .font (
+                                .system(size: 50, weight: .semibold)
                             )
-                            .weight(.light)
-                        )
-                        .italic()
-                        .foregroundColor(Color(red: 0.58, green: 0.52, blue: 0.30))
-                    
-                    Button {
+                            .padding(.bottom, 50)
+                            .overlay {
+                                    LinearGradient(
+                                        colors: [Color(red: 0.26, green: 0.32, blue: 0.50), Color(red: 0.39, green: 0.51, blue: 0.58), Color(red: 0.52, green: 0.63, blue: 0.65)],
+                                        startPoint: .leading,
+                                        endPoint: .trailing
+                                    )
+                                    .mask(
+                                        Text("Taylor Swift")
+                                            .font (
+                                                .system(size: 50, weight: .semibold)
+                                            )
+                                            .padding(.bottom, 50)
+                                    )
+                                }
                         
-                    } label: {
-                        Text("Song")
-                            .frame(maxWidth: 180)
-                            .fontWeight(.semibold)
-                    }
-                    .buttonStyle(.borderedProminent)
-                    .cornerRadius(50)
-                    .tint(Color(red: 0.27, green: 0.33, blue: 0.30))
-                    .background(
+                        Text("Guess the...")
+                            .font (
+                                .system (
+                                    .title
+                                )
+                                .weight(.light)
+                            )
+                            .italic()
+                            .foregroundColor(Color(red: 0.58, green: 0.52, blue: 0.30))
+                        
+//                            Button {
+//                                isSong = true
+//
+//                            } label: {
+//                                Text("Song")
+//                                    .frame(maxWidth: 180)
+//                                    .fontWeight(.semibold)
+//                            }
+//                            .buttonStyle(.borderedProminent)
+//                            .cornerRadius(50)
+//                            .tint(Color(red: 0.27, green: 0.33, blue: 0.30))
+//                            .background(
+//                                        RoundedRectangle(cornerRadius: 50)
+//                                            .shadow(color: .black, radius: 1, x: 0, y: 1)
+//                                )
+//                        .padding(15)
+                        
+                        NavigationLink{
+                            QuestionView(selectedSong: self.$isSong)
+                        } label: {
+                            Text("Song")
+                                .frame(maxWidth: 180)
+                                .fontWeight(.semibold)
+                        }
+                        .buttonStyle(.borderedProminent)
+                            .cornerRadius(50)
+                            .tint(Color(red: 0.27, green: 0.33, blue: 0.30))
+                            .background(
                                 RoundedRectangle(cornerRadius: 50)
-                                    .shadow(color: .black, radius: 1, x: 0, y: 1)
-                        )
-                    .padding(15)
-                    
-                    
-                    Button {
+                                .shadow(color: .black, radius: 1, x: 0, y: 1)
+                            )
+                        .padding(15)
                         
-                    } label: {
-                        Text("Album")
-                            .frame(maxWidth: 180)
-                            .fontWeight(.semibold)
-                    }
-                    .buttonStyle(.borderedProminent)
-                    .cornerRadius(50)
-                    .tint(Color(red: 0.43, green: 0.25, blue: 0.25))
-                    .background(
+                        
+                        
+//                        Button {
+//
+//                        } label: {
+//                            Text("Album")
+//                                .frame(maxWidth: 180)
+//                                .fontWeight(.semibold)
+//                        }
+//                        .buttonStyle(.borderedProminent)
+//                        .cornerRadius(50)
+//                        .tint(Color(red: 0.43, green: 0.25, blue: 0.25))
+//                        .background(
+//                                    RoundedRectangle(cornerRadius: 50)
+//                                        .shadow(color: .black, radius: 1, x: 0, y: 1)
+//                            )
+//
+                        
+                        NavigationLink{
+                            QuestionView(selectedSong: self.$isAlbum)
+                        } label: {
+                            Text("Album")
+                                .frame(maxWidth: 180)
+                                .fontWeight(.semibold)
+                        }
+                        .buttonStyle(.borderedProminent)
+                            .cornerRadius(50)
+                            .tint(Color(red: 0.43, green: 0.25, blue: 0.25))
+                            .background(
                                 RoundedRectangle(cornerRadius: 50)
-                                    .shadow(color: .black, radius: 1, x: 0, y: 1)
-                        )
-                    
+                                .shadow(color: .black, radius: 1, x: 0, y: 1)
+                            )
                         
+                            
+                    }
                 }
+                
             }
-            
         }
     }
 }
@@ -150,7 +190,7 @@ struct FloatingClouds: View {
                           rotationStart: 0,
                           duration: 60)
                 }
-                .blur(radius: blur)
+//                .blur(radius: blur)
             }
             .ignoresSafeArea()
         }
