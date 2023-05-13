@@ -190,7 +190,7 @@ struct FloatingClouds: View {
                           rotationStart: 0,
                           duration: 60)
                 }
-//                .blur(radius: blur)
+                .blur(radius: blur)
             }
             .ignoresSafeArea()
         }
