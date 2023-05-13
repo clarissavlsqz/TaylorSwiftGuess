@@ -10,10 +10,12 @@ import SwiftUI
 struct QuestionView: View {
     @Binding var selectedSong: Bool
     var question = QuestionModel()
-    @State var quote: String
-    @State var song: String
-    @State var album: String
+    @State private var quote: String = ""
+    @State private var song: String = ""
+    @State private var album: String = ""
     @State private var userInput: String = ""
+    @State private var showResult: Bool = false
+    @State private var disableTextField = false
 
     
     var body: some View {
@@ -32,15 +34,44 @@ struct QuestionView: View {
                             .foregroundColor(Color(red: 0.75, green: 0.67, blue: 0.84, opacity: 0.5))
                             .frame(width: 300, height: 220)
                             .overlay() {
-                                Text("Lalasldlasdasd")
+                                Text(quote)
                                     .font (
-                                        .system(size: 35)
+                                        .system(size: 25)
+                                        .italic()
                                         )
-                                        .foregroundColor(Color(red: 0.08, green: 0.12, blue: 0.17))
+                                        //.foregroundColor(Color(red: 0.08, green: 0.12, blue: 0.17))
+                                        .minimumScaleFactor(0.01)
+                                        .foregroundColor(.white)
                                         .padding()
+                                
                             }
                     }
                 Spacer()
+                
+           
+                if verifyAnswer(input: userInput, answer: selectedSong ? song : album) {
+                        HStack {
+                            Image(systemName: "checkmark.circle.fill")
+                                .foregroundColor(.green)
+                                .opacity(showResult ? 1 : 0)
+                            Text("Correct")
+                                .foregroundColor(.green)
+                                .opacity(showResult ? 1 : 0)
+                        }
+                        .offset(y:-40)
+                    } else {
+                        HStack {
+                            Image(systemName: "multiply.circle.fill")
+                                .foregroundColor(.red)
+                                .opacity(showResult ? 1 : 0)
+                            Text("Incorrect")
+                                .foregroundColor(.red)
+                                .opacity(showResult ? 1 : 0)
+                        }
+                        .offset(y:-40)
+                    }
+                
+                
                 TextField(selectedSong ? "Song" : "Album", text: $userInput)
                     .frame(width: 230, height: 30)
                     .padding(10)
@@ -50,7 +81,34 @@ struct QuestionView: View {
                             .fill(Color(red: 1, green: 1, blue: 1, opacity: 0.7))
                             
                     }
+                    .disabled(disableTextField)
+                    .onSubmit {
+                        showResult = true
+                        disableTextField = true
+                    }
                     
+                Spacer()
+                Button {
+                    
+                    var questionToDisplay: Question?
+                    Task {
+                        questionToDisplay = await question.fetch()
+                        quote = questionToDisplay?.quote ?? "Error at fetching data"
+                        song = questionToDisplay?.song ?? "Error at fetching data"
+                        album = questionToDisplay?.album ?? "Error at fetching data"
+                    }
+                    showResult = false
+                    userInput = ""
+                    disableTextField = false
+                    
+                } label: {
+                    Text("Next")
+                        .frame(maxWidth: 80)
+                        .fontWeight(.semibold)
+                }
+                .buttonStyle(.borderedProminent)
+                    .cornerRadius(10)
+                    .tint(Color(red: 0.58, green: 0.52, blue: 0.30, opacity: 0.7))
                 Spacer()
                     
                 
@@ -58,19 +116,26 @@ struct QuestionView: View {
             }
             .onAppear() {
                 
-//                var questionToDisplay: Question?
-//                Task {
-//                    questionToDisplay = await question.fetch()
-//                    quote = questionToDisplay?.quote ?? "Error at fetching data"
-//                    song = questionToDisplay?.song ?? "Error at fetching data"
-//                    album = questionToDisplay?.album ?? "Error at fetching data"
-//                }
+                var questionToDisplay: Question?
+                Task {
+                    questionToDisplay = await question.fetch()
+                    quote = questionToDisplay?.quote ?? "Error at fetching data"
+                    song = questionToDisplay?.song ?? "Error at fetching data"
+                    album = questionToDisplay?.album ?? "Error at fetching data"
+                }
                 
             }
             
         }
         
     }
+}
+
+func verifyAnswer(input : String, answer : String) -> Bool {
+    if input.lowercased() == answer.lowercased() {
+        return true
+    }
+    return false
 }
 
 struct Card: View {
@@ -131,6 +196,6 @@ struct Card: View {
 
 struct QuestionView_Previews: PreviewProvider {
     static var previews: some View {
-        QuestionView(selectedSong: .constant(true), quote: "", song: "", album: "")
+        QuestionView(selectedSong: .constant(true))
     }
 }
